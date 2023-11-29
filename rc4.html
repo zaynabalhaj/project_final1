@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RC_4 cipher</title>
+
+    <link href = "font.css" rel = "stylesheet" type="text/css"> 
+    <script src="RC_4.js"></script>
+</head>
+
+<body >
+    
+    
+    <label for="text" >Enter the plain/cipher text: </label>
+    <textarea id="text" placeholder="ASCII characters for encrytion , Hexadecimal for decryption "></textarea>
+
+    <label for="key">Enter a random hexadecimal key:</label>
+    <input type="text" id="key" placeholder = "Enter a hexadecimal string or generate the key">
+    <button class = "start1"  onclick="generatekey()">Generate Key</button>
+
+    
+    <button class="start4"  onclick="rc_4encrypt()">Encrypt</button>
+    <button class="start4" onclick="rc_4decrypt()" >Decrypt</button>
+    
+    <div class="result-container">
+        <h2>Result:</h2>
+        <div id="result" class="result-box"></div>
+    </div>
+
+    <!-- Custom Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="custom-popup" id="customPopup">
+        <img class="icon" src="Free Sad Face PNG, SVG Icon.jpg" alt="Icon"> 
+        <p>Please enter a hexadecimal key i.e:A123.</p>
+        <button class="ok-button" onclick="hideCustomPopup()">OK</button>
+    </div>
+
+    <!-- second popup window-->
+    <div class="overlay" id="overlay2"></div>
+    <div class="custom-popup-2" id="customPopup2">
+        <img class="icon" src="Free Sad Face PNG, SVG Icon.jpg" alt="Icon">
+        <p>Please enter all inputs.</p>
+        <button class="ok-button" onclick="hideCustomPopup2()">OK</button>
+    </div>
+
+    <div class="overlay" id="overlay4"></div>
+    <div class="custom-popup-2" id="customPopup4">
+        <img class="icon" src="Free Sad Face PNG, SVG Icon.jpg" alt="Icon">
+        <p>Please enter a hexadecimal text.</p>
+        <button class="ok-button" onclick="convert()">Convert to hex </button>
+        <button class="ok-button" onclick="hideCustomPopup4()">OK</button>
+    </div>
+     
+
+</body>
+
+<script>
+
+        function convert(){
+            const input = document.getElementById('text');
+            const hex = StringtoHex(input.value);
+            input.value = hex;
+            hideCustomPopup4();
+        }
+
+        function isHexadecimal(s) {
+            const hexRegex = /^[0-9A-Fa-f]+$/g; //expression to match hexadecimal characters
+            return hexRegex.test(s);
+        }
+
+        function generatekey(){
+            const keyinput = document.getElementById('key');
+            keyinput.value = generateRandomHex();
+
+        }
+        function showCustomPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('customPopup').style.display = 'block';
+        }
+
+        function hideCustomPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('customPopup').style.display = 'none';
+        }
+
+        //pop up window for non hexa.
+        function showCustomPopup4() {
+            document.getElementById('overlay4').style.display = 'block';
+            document.getElementById('customPopup4').style.display = 'block';
+        }
+
+        function hideCustomPopup4() {
+            document.getElementById('overlay4').style.display = 'none';
+            document.getElementById('customPopup4').style.display = 'none';
+        }
+
+        // Function to show second popup
+        function showCustomPopup2() {
+            document.getElementById('overlay2').style.display = 'block';
+            document.getElementById('customPopup2').style.display = 'block';
+        }
+
+        // Function to hide second popup
+        function hideCustomPopup2() {
+            document.getElementById('overlay2').style.display = 'none';
+            document.getElementById('customPopup2').style.display = 'none';
+        }
+
+
+    function rc_4encrypt(){
+
+        const text = document.getElementById('text').value;
+        const key = document.getElementById('key').value;
+        
+        if (!key ||  !text) { 
+            showCustomPopup2();
+            return;
+        }
+        if ( !isHexadecimal(key)) {
+            showCustomPopup(); 
+            return;
+        }
+        let result = '';
+        result = rc4_encryption(text,key);
+
+        document.getElementById('result').innerText = result;
+    }
+    
+
+    function rc_4decrypt(){
+        const text = document.getElementById('text').value;
+        const key = document.getElementById('key').value;
+        
+        if (!key ||  !text) { 
+            showCustomPopup2();
+            return;
+        }
+        
+        if ( !isHexadecimal(key)) {
+            showCustomPopup(); 
+            return;
+        }
+
+        if(!isHexadecimal(text)){
+            showCustomPopup4();
+            return;
+        }
+
+        let result = '';
+        result = rc4_decryption(text,key);
+
+        document.getElementById('result').innerText = result;
+    }
+    
+</script>
